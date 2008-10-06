@@ -2,6 +2,8 @@
 # Copyright (C) 2007 admin@immerda.ch
 # GPLv3
 
+import 'defines.pp'
+
 class openvpn {
     case $operatingsystem {
         openbsd: { include openvpn::openbsd }
@@ -28,6 +30,11 @@ class openvpn::base {
                     "puppet://$server/openvpn/server.conf" ],
         notify => Service[openvpn], 
         owner => root, group => 0, mode => 0600;
+    }
+
+    file{'/etc/openvpn/clients':
+        ensure => directory,
+        owner => root, group => 0, mode => 0755;
     }
 }
 
