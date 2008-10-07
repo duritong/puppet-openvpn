@@ -9,6 +9,9 @@ class openvpn {
         openbsd: { include openvpn::openbsd }
         default: { include openvpn::base }
     }
+    if $use_munin {
+        include openvpn::munin
+    }
 }
 
 class openvpn::base {
