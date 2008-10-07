@@ -12,7 +12,7 @@ define openvpn::add_client_infos(
         default: { $gw_string = $default_gw }
     }
    file{"${client_dir}/${name}":
-        content => "${client_too} ${client_ipaddress} ${subnet} ${gw_string}",
+        content => "${client_tool} ${client_ipaddress} ${subnet} ${gw_string}",
         require => File['/etc/openvpn/clients'],
         owner => root, group => 0, mode => 0644;
     } 
