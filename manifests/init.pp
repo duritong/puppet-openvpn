@@ -46,8 +46,8 @@ class openvpn::openbsd inherits openvpn::base {
         hasrestart => false,
         hasstatus => false,
         start => '/usr/local/sbin/openvpn /etc/openvpn/server.conf',
-        restart => "kill -HUP `ps ax | grep /usr/sbin/sshd | grep -v grep | awk '{print $1}'`",
-        stop => "kill `ps ax | grep /usr/sbin/sshd | grep -v grep | awk '{print $1}'`",
+        restart => "kill -HUP `ps ax | grep /usr/local/sbin/openvpn | grep -v grep | awk '{print $1}'`",
+        stop => "kill `ps ax | grep /usr/local/sbin/openvpn | grep -v grep | awk '{print $1}'`",
     }
 
     openbsd::add_to_rc_local{'openvpn':
