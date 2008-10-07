@@ -53,7 +53,7 @@ class openvpn::openbsd inherits openvpn::base {
     openbsd::add_to_rc_local{'openvpn':
         binary => '/etc/openvpn/server.conf',
         test_op => '-f',
-        start_cmd => '/usr/local/sbin/openvpn /etc/openvpn/server.conf',
+        start_cmd => 'cd /etc/openvpn/; /usr/local/sbin/openvpn --daemon --config /etc/openvpn/server.conf',
     }
 
 }
