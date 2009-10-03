@@ -2,8 +2,6 @@
 # Copyright (C) 2007 admin@immerda.ch
 # GPLv3
 
-import 'defines.pp'
-
 class openvpn {
     case $operatingsystem {
         openbsd: { include openvpn::openbsd }
@@ -12,48 +10,4 @@ class openvpn {
     if $use_munin {
         include openvpn::munin
     }
-}
-
-class openvpn::base {
-    package{'openvpn':
-        ensure => installed,
-    }
-
-    service{'openvpn':
-        ensure => running,
-        enable => true,
-        require => Package[openvpn],
-        hasstatus => true,
-        hasrestart => true,
-    }
-
-    file{'/etc/openvpn/server.conf':
-        source => [ "puppet://$server/files/openvpn/${fqdn}/server.conf",
-                    "puppet://$server/files/openvpn/server.conf",
-                    "puppet://$server/openvpn/server.conf" ],
-        notify => Service[openvpn], 
-        owner => root, group => 0, mode => 0600;
-    }
-
-    file{'/etc/openvpn/clients':
-        ensure => directory,
-        owner => root, group => 0, mode => 0755;
-    }
-}
-
-class openvpn::openbsd inherits openvpn::base {
-    Service[openvpn]{
-        hasrestart => false,
-        hasstatus => false,
-        start => 'cd /etc/openvpn/; /usr/local/sbin/openvpn --daemon --config /etc/openvpn/server.conf',
-        restart => "kill -HUP `ps ax | grep /usr/local/sbin/openvpn | grep -v grep | awk '{print $1}'`",
-        stop => "kill `ps ax | grep /usr/local/sbin/openvpn | grep -v grep | awk '{print $1}'`",
-    }
-
-    openbsd::add_to_rc_local{'openvpn':
-        binary => '/etc/openvpn/server.conf',
-        test_op => '-f',
-        start_cmd => 'cd /etc/openvpn/; /usr/local/sbin/openvpn --daemon --config /etc/openvpn/server.conf',
-    }
-
 }

@@ -1,6 +1,4 @@
-# manifests/defines.pp
-
-define openvpn::add_client_infos(
+define openvpn::client_infos(
     $client_dir = '/etc/openvpn/clients',
     $client_tool = 'ifconfig-push',
     $client_ipaddress,
@@ -15,5 +13,5 @@ define openvpn::add_client_infos(
         content => "${client_tool} ${client_ipaddress} ${subnet} ${gw_string}",
         require => File['/etc/openvpn/clients'],
         owner => root, group => 0, mode => 0644;
-    } 
+    }
 }
