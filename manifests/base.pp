@@ -12,8 +12,8 @@ class openvpn::base {
     } 
  
     file{'/etc/openvpn/server.conf': 
-        source => [ "puppet://$server/files/openvpn/${fqdn}/server.conf", 
-                    "puppet://$server/files/openvpn/server.conf", 
+        source => [ "puppet://$server/modules/site-openvpn/${fqdn}/server.conf", 
+                    "puppet://$server/modules/site-openvpn/server.conf", 
                     "puppet://$server/modules/openvpn/server.conf" ], 
         notify => Service[openvpn],  
         owner => root, group => 0, mode => 0600; 
