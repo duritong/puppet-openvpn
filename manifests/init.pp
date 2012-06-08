@@ -3,11 +3,11 @@
 # GPLv3
 
 class openvpn {
-    case $operatingsystem {
-        openbsd: { include openvpn::openbsd }
-        default: { include openvpn::base }
-    }
-    if $use_munin {
-        include openvpn::munin
-    }
+  case $::operatingsystem {
+    openbsd: { include openvpn::openbsd }
+    default: { include openvpn::base }
+  }
+  if hiera('use_munin',false) {
+    include openvpn::munin
+  }
 }
