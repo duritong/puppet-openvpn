@@ -8,7 +8,7 @@ define openvpn::instance (
     exec{
       'build-dh':
         cwd      => '/etc/openvpn',
-        command  => "/usr/bin/openssl dhparam -out dh.pem ${KEY_SIZE}",
+        command  => "/usr/bin/openssl dhparam -out dh.pem $key_size",
         creates  => "/etc/openvpn/dh.pem",
         require  => Package[openvpn];
     }
