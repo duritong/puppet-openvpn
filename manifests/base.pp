@@ -4,10 +4,10 @@ class openvpn::base {
   }
 
   service{'openvpn':
-    ensure => running,
-    enable => true,
-    require => Package[openvpn],
-    hasstatus => true,
+    ensure     => running,
+    enable     => true,
+    require    => Package[openvpn],
+    hasstatus  => true,
     hasrestart => true,
   }
 
