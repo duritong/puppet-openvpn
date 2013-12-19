@@ -1,6 +1,5 @@
 define openvpn::instance (
-  $ensure = 'present',
-  $key_size = '4096',
+  $ensure = 'present'
 ) {
   if $ensure == 'present' {
     include openvpn
