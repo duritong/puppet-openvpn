@@ -3,7 +3,7 @@
 # GPLv3
 
 class openvpn (
-  $manage_munin => false
+  $manage_munin = false
 ) {
   case $::operatingsystem {
     openbsd: { include openvpn::openbsd }
