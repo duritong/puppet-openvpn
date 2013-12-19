@@ -1,4 +1,4 @@
-class openvpn::instance (
+define openvpn::instance (
   $ensure = 'present',
   $key_size = '4096',
 ) {
