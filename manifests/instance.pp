@@ -5,18 +5,13 @@ define openvpn::instance (
   if $ensure == 'present' {
     include openvpn
 
-    exec{
-      'build-dh':
-        cwd      => '/etc/openvpn',
-        command  => "/usr/bin/openssl dhparam -out dh.pem $key_size",
-        creates  => "/etc/openvpn/dh.pem",
-        require  => Package[openvpn];
-    }
-
     file{
       '/etc/openvpn/ca.crt':
         source  => ["puppet:///modules/site_openvpn/${::fqdn}/ca.crt",
                     "puppet:///modules/site_openvpn/ca.crt"],
+        require => Package[openvpn];
+      '/etc/openvpn/dh.pem':
+        source  => ["puppet:///modules/site_openvpn/${::fqdn}/dh.pem"],
         require => Package[openvpn];
       '/etc/openvpn/server.crt':
         source  => ["puppet:///modules/site_openvpn/${::fqdn}/server.crt"],
