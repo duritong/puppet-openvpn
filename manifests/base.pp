@@ -56,16 +56,31 @@ class openvpn::base (
   }
 
   file{
-    #create those ahead of time with: "openssl dhparam -out dh.pem $key_size"
+    # create those ahead of time with: "openssl dhparam -out dh.pem $key_size"
     '/etc/openvpn/dh.pem':
       source  => ["puppet:///modules/site_openvpn/${::fqdn}/dh.pem"],
+      owner   => root,
+      group   => 0,
+      mode    => 0600,
       require => File['/etc/openvpn'];
     '/etc/openvpn/ca.crt':
       source  => ["puppet:///modules/site_openvpn/${::fqdn}/ca.crt",
                   "puppet:///modules/site_openvpn/ca.crt"],
+      owner   => root,
+      group   => 0,
+      mode    => 0600,
       require => File['/etc/openvpn'];
+    # provide this file by signing '/etc/openvpn/server.csr' with your ca.
     '/etc/openvpn/server.crt':
       source  => ["puppet:///modules/site_openvpn/${::fqdn}/server.crt"],
+      owner   => root,
+      group   => 0,
+      mode    => 0600,
+      require => Exec['generate-csr'];
+    '/etc/openvpn/server.key':
+      owner   => root,
+      group   => 0,
+      mode    => 0600,
       require => Exec['generate-csr'];
   }
 }
