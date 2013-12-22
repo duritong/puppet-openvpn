@@ -1,6 +1,7 @@
 [ req ]
 distinguished_name     = req_distinguished_name
 attributes             = req_attributes
+x509_extensions        = usr_cert
 prompt                 = no
 
 [ req_distinguished_name ]
@@ -11,6 +12,8 @@ O                      = <%= key_organization %>
 OU                     = <%= key_organization_unit %>
 CN                     = <%= key_common_name %>
 emailAddress           = <%= key_email %>
+
+[ usr_cert ]
 nsCertType             = server
 
 [ req_attributes ]
