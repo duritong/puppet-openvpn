@@ -1,5 +1,7 @@
 [ req ]
 distinguished_name     = req_distinguished_name
+attributes             = req_attributes
+prompt                 = no
 
 [ req_distinguished_name ]
 C                      = <%= key_country %>
@@ -9,3 +11,6 @@ O                      = <%= key_organization %>
 OU                     = <%= key_organization_unit %>
 CN                     = <%= key_common_name %>
 emailAddress           = <%= key_email %>
+
+[ req_attributes ]
+
