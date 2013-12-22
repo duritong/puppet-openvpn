@@ -1,0 +1,11 @@
+[ req ]
+distinguished_name     = req_distinguished_name
+
+[ req_distinguished_name ]
+C                      = <%= key_country %>
+ST                     = <%= key_state %>
+L                      = <%= key_locality %>
+O                      = <%= key_organization %>
+OU                     = <%= key_organization_unit %>
+CN                     = <%= key_common_name %>
+emailAddress           = <%= key_email %>
