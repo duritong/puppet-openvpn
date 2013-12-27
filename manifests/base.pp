@@ -16,7 +16,7 @@ class openvpn::base {
       ensure  => directory,
       require => Package[openvpn];
     '/etc/openvpn/server.conf':
-      source  => template("openvpn/server.conf.erb"),
+      content => template("openvpn/server.conf.erb"),
       owner   => root,
       group   => 0,
       mode    => 0600,
