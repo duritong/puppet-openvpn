@@ -36,8 +36,8 @@ class openvpn::base {
 
   exec{
     'generate-csr':
-      command => "openssl req -batch -days $key_expire -nodes -new \
--config /etc/openvpn/req-config -newkey rsa:$key_size \
+      command => "openssl req -batch -days $openvpn::key_expire -nodes -new \
+-config /etc/openvpn/req-config -newkey rsa:$openvpn::key_size \
 -keyout '/etc/openvpn/server.key' -out '/etc/openvpn/server.csr'",
       creates => "/etc/openvpn/server.csr",
       require => File['/etc/openvpn/req-config'];
