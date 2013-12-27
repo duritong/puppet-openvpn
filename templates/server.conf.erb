@@ -32,7 +32,7 @@ dh dh.pem
 
 # Configure server mode and supply a VPN subnet
 # for OpenVPN to draw client addresses from.
-server <%= @local_net[0] %> <%= cidr2netmask(@local_net[1]) %>
+server <%= @local_net[0] %> <%= @local_netmask %>
 
 # Maintain a record of client <-> virtual IP address
 # associations in this file.

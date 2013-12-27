@@ -24,6 +24,8 @@ class openvpn (
   $comp_lzo = false,
   $max_clients = 100
 ) {
+  $local_netmask = cidr2netmask($local_net[1])
+
   case $::operatingsystem {
     openbsd: { include openvpn::openbsd }
     default: { include openvpn::base }
