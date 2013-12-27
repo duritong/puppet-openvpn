@@ -1,14 +1,4 @@
-class openvpn::base (
-  $key_size = 4096,
-  $key_expire = 365,
-  $key_country,
-  $key_state,
-  $key_locality,
-  $key_organization,
-  $key_organization_unit,
-  $key_common_name,
-  $key_email
-) {
+class openvpn::base {
   package{'openvpn':
     ensure => installed,
   }
@@ -26,9 +16,7 @@ class openvpn::base (
       ensure  => directory,
       require => Package[openvpn];
     '/etc/openvpn/server.conf':
-      source  => ["puppet:///modules/site_openvpn/${::fqdn}/server.conf",
-                  "puppet:///modules/site_openvpn/server.conf",
-                  "puppet:///modules/openvpn/server.conf"],
+      source  => template("openvpn/server.conf.erb"),
       owner   => root,
       group   => 0,
       mode    => 0600,
