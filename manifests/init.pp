@@ -21,7 +21,7 @@ class openvpn (
   $push_route = [],
   $push_default_gw = false,
   $dns_server = [],
-  $comp-lzo = false,
+  $comp_lzo = false,
   $max_clients = 100
 ) {
   case $::operatingsystem {
