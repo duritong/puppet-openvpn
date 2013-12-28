@@ -69,7 +69,7 @@ push "dhcp-option DNS <%= dns %>"
 # the other side has gone down.
 keepalive 10 120
 
-<% if $comp_lzo %>
+<% if @comp_lzo %>
 # Enable compression on the VPN link.
 comp-lzo
 <% end %>
@@ -98,3 +98,5 @@ status openvpn-status.log
 # Set the appropriate level of log
 # file verbosity.
 verb 3
+
+<%= @additional_config %>

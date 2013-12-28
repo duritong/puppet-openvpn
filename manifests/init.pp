@@ -22,7 +22,8 @@ class openvpn (
   $push_default_gw = false,
   $dns_server = [],
   $comp_lzo = false,
-  $max_clients = 100
+  $max_clients = 100,
+  $additional_config
 ) {
   $local_netmask = cidr2netmask($local_net[1])
 
