@@ -13,7 +13,7 @@ define openvpn::client_infos(
 
   file{
     "${client_dir}/${name}":
-      content => template("openvpn/server.conf.erb"),
+      content => template("openvpn/custom-client.conf.erb"),
       owner   => root,
       group   => 0,
       mode    => 0600,
