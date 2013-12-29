@@ -1,8 +1,9 @@
+# set client specific infos
 define openvpn::client_infos(
-  $client_dir = '/etc/openvpn/clients',
-  $client_tool = 'ifconfig-push',
-  $client_ip = undef,
-  $server_ip = undef,
+  $client_dir   = '/etc/openvpn/clients',
+  $client_tool  = 'ifconfig-push',
+  $client_ip    = undef,
+  $server_ip    = undef,
   $zone
 ) {
   $zone_conf = $openvpn::zones[$zone]
@@ -16,14 +17,14 @@ define openvpn::client_infos(
       ensure  => directory,
       owner   => root,
       group   => 0,
-      mode    => 0755,
+      mode    => '0755',
       require => File['/etc/openvpn'];
 
     "${client_dir}/${name}":
-      content => template("openvpn/custom-client.conf.erb"),
+      content => template('openvpn/custom-client.conf.erb'),
       owner   => root,
       group   => 0,
-      mode    => 0644,
+      mode    => '0600',
       notify  => Service[openvpn],
       require => File['/etc/openvpn'];
   }
