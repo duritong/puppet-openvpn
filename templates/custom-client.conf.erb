@@ -10,7 +10,7 @@ ifconfig-push <%= @client_ip %> <%= @server_ip %>
 iroute <%= @iroute %>
 <% end %>
 
-<% unless @push_route.empty? %>
+<% unless @push_route.nil? || @push_route.empty? %>
 # Push routes to the client to allow it
 # to reach other private subnets behind
 # the server.
@@ -26,7 +26,7 @@ push "route <%= route %>"
 push "redirect-gateway def1 bypass-dhcp"
 <% end %>
 
-<% unless @dns_server.empty? %>
+<% unless @dns_server.nil? || @dns_server.empty? %>
 # Certain Windows-specific network settings
 # can be pushed to clients, such as DNS
 # or WINS server addresses.

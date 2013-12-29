@@ -11,14 +11,6 @@ define openvpn::client_infos(
   $push_route = $zone_conf['push_route']
   $dns_server = $zone_conf['dns_server']
 
-  if $push_route == 'undef' {
-    $push_route = []
-  }
-
-  if $dns_server == 'undef' {
-    $dns_server = []
-  }
-
   file{
     "${client_dir}/${name}":
       content => template("openvpn/custom-client.conf.erb"),
