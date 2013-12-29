@@ -17,7 +17,7 @@ define openvpn::client_infos(
       content => template('openvpn/custom-client.conf.erb'),
       owner   => root,
       group   => 0,
-      mode    => '0600',
+      mode    => '0644',
       notify  => Service[openvpn],
       require => File['/etc/openvpn'];
   }
