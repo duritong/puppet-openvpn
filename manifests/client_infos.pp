@@ -7,9 +7,17 @@ define openvpn::client_infos(
 ) {
   $zone_conf = $openvpn::zones[$zone]
   $iroute = $zone_conf['route']
+  $additional_config = $zone_conf['additional_config']
   $push_route = $zone_conf['push_route']
   $dns_server = $zone_conf['dns_server']
-  $additional_config = $zone_conf['additional_config']
+
+  if $push_route == 'undef' {
+    $push_route = []
+  }
+
+  if $dns_server == 'undef' {
+    $dns_server = []
+  }
 
   file{
     "${client_dir}/${name}":
