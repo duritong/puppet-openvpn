@@ -26,7 +26,7 @@ class openvpn::base {
       ensure  => directory,
       owner   => 'root',
       group   => 0,
-      mode    => 0755,
+      mode    => '0755',
       notify  => Service[openvpn],
       require => File['/etc/openvpn'];
     '/etc/openvpn/req-config':

@@ -13,13 +13,6 @@ define openvpn::client_infos(
   $dns_server = $zone_conf['dns_server']
 
   file {
-    "${client_dir}":
-      ensure  => directory,
-      owner   => root,
-      group   => 0,
-      mode    => '0755',
-      require => File['/etc/openvpn'];
-
     "${client_dir}/${name}":
       content => template('openvpn/custom-client.conf.erb'),
       owner   => root,
