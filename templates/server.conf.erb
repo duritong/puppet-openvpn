@@ -40,7 +40,7 @@ ifconfig-pool-persist ipp.txt
 
 <% unless @zones.empty? %>
 <% @zones.each do |zone| %>
-<% unless zone['route'].empty? %>
+<% unless zone['route'].nil? %>
 route <%= zone['route'] %>
 <% end %>
 <% end %>
