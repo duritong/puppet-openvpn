@@ -5,7 +5,7 @@ define openvpn::client_infos(
   $server_ip = undef,
   $zone
 ) {
-  $zone_conf = $zones[$zone]
+  $zone_conf = $openvpn::zones[$zone]
   $iroute = $zone_conf['route']
   $push_route = $zone_conf['push_route']
   $dns_server = $zone_conf['dns_server']
