@@ -39,7 +39,7 @@ server <%= @local_net[0] %> <%= @local_netmask %>
 ifconfig-pool-persist ipp.txt
 
 <% unless @zones.empty? %>
-<% @zones.each do |zone| %>
+<% @zones.each do |name,zone| %>
 <% unless zone['route'].nil? %>
 route <%= zone['route'] %>
 <% end %>
