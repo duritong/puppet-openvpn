@@ -32,6 +32,15 @@ class openvpn::base {
     '/etc/openvpn/req-config':
       content => template('openvpn/req-config.erb'),
       require => File['/etc/openvpn'];
+    '/etc/openvpn/crl.pem':
+      source  => ["puppet:///modules/site_openvpn/${::fqdn}/crl.pem",
+                  "puppet:///modules/site_openvpn/crl.pem",
+                  "puppet:///modules/openvpn/crl.pem"],
+      owner   => 'root',
+      group   => 0,
+      mode    => '0755',
+      notify  => Service[openvpn],
+      require => File['/etc/openvpn'];
   }
 
   exec{

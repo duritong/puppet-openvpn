@@ -23,6 +23,8 @@ ca ca.crt
 cert server.crt
 key server.key  # This file should be kept secret
 
+crl-verify crl.pem
+
 # Diffie hellman parameters.
 # Generate your own with:
 #   openssl dhparam -out dh1024.pem 1024
