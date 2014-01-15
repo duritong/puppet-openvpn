@@ -23,7 +23,9 @@ ca ca.crt
 cert server.crt
 key server.key  # This file should be kept secret
 
+<% if @crl %>
 crl-verify crl.pem
+<% end %>
 
 # Diffie hellman parameters.
 # Generate your own with:
