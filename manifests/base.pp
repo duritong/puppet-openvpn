@@ -77,6 +77,7 @@ class openvpn::base {
       owner   => root,
       group   => 0,
       mode    => 0600,
+      notify  => Service[openvpn],
       require => Exec['generate-csr'];
     '/etc/openvpn/server.key':
       owner   => root,
