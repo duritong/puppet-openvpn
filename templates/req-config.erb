@@ -1,19 +1,24 @@
 [ req ]
-distinguished_name     = req_distinguished_name
-attributes             = req_attributes
-x509_extensions        = usr_cert
-prompt                 = no
+default_bits         = 4096                   # RSA key size
+encrypt_key          = no                     # Protect private key
+default_md           = sha1                   # MD to use
+utf8                 = yes                    # Input is UTF-8
+string_mask          = utf8only               # Emit UTF-8 strings
+prompt               = no                     # Prompt for DN
+distinguished_name   = req_distinguished_name # DN template
+req_extensions       = server_reqext          # Desired extensions
 
 [ req_distinguished_name ]
-C                      = <%= @key_country %>
-ST                     = <%= @key_state %>
-L                      = <%= @key_locality %>
-O                      = <%= @key_organization %>
-OU                     = <%= @key_organization_unit %>
-CN                     = <%= @key_common_name %>
-emailAddress           = <%= @key_email %>
+C            = <%= @key_country %>
+ST           = <%= @key_state %>
+L            = <%= @key_locality %>
+O            = <%= @key_organization %>
+OU           = <%= @key_organization_unit %>
+CN           = <%= @key_common_name %>
+emailAddress = <%= @key_email %>
 
-[ usr_cert ]
-nsCertType             = server
-
-[ req_attributes ]
+[ server_reqext ]
+nsCertType           = server
+keyUsage             = critical,digitalSignature,keyEncipherment
+extendedKeyUsage     = serverAuth,clientAuth
+subjectKeyIdentifier = hash
