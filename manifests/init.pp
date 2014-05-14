@@ -17,7 +17,7 @@ class openvpn (
   $bind_port = 1194,
   $protocol = 'udp',
   $device_type = 'tun',
-  $local_net = ['10.8.0.0', '255.255.255.0'],
+  $local_net = ['10.8.0.0', '24'],
   $push_route = [],
   $push_default_gw = false,
   $dns_server = [],
