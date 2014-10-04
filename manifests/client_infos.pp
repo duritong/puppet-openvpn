@@ -4,8 +4,6 @@ define openvpn::client_infos(
   $client_tool  = 'ifconfig-push',
   $client_ip    = undef,
   $server_ip    = undef,
-  $dns_server   = [],
-  $dns_domain   = [],
   $zone
 ) {
   $zone_conf = $openvpn::zones[$zone]
@@ -13,6 +11,13 @@ define openvpn::client_infos(
   $additional_config = $zone_conf['additional_config']
   $push_route = $zone_conf['push_route']
   $dns_server = $zone_conf['dns_server']
+  $dns_domain = $zone_conf['dns_domain']
+  if (!$dns_server) {
+    $dns_server = []
+  }
+  if (!$dns_domain) {
+    $dns_domain = []
+  }
 
   file {
     "${client_dir}/${name}":
