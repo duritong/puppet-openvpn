@@ -21,6 +21,7 @@ class openvpn (
   $push_route = [],
   $push_default_gw = false,
   $dns_server = [],
+  $dns_domain = [],
   $comp_lzo = false,
   $max_clients = 100,
   $additional_config = '',

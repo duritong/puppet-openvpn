@@ -4,6 +4,8 @@ define openvpn::client_infos(
   $client_tool  = 'ifconfig-push',
   $client_ip    = undef,
   $server_ip    = undef,
+  $dns_server   = [],
+  $dns_domain   = [],
   $zone
 ) {
   $zone_conf = $openvpn::zones[$zone]
