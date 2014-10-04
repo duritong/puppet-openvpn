@@ -10,12 +10,14 @@ define openvpn::client_infos(
   $iroute = $zone_conf['route']
   $additional_config = $zone_conf['additional_config']
   $push_route = $zone_conf['push_route']
-  $dns_server = $zone_conf['dns_server']
-  $dns_domain = $zone_conf['dns_domain']
-  if (!$dns_server) {
+  if ($zone_conf['dns_server']) {
+    $dns_server = $zone_conf['dns_server']
+  } else {
     $dns_server = []
   }
-  if (!$dns_domain) {
+  if ($zone_conf['dns_domain']) {
+    $dns_domain = $zone_conf['dns_domain']
+  } else {
     $dns_domain = []
   }
 
