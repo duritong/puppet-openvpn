@@ -38,6 +38,7 @@ class openvpn::base {
     file {
       '/etc/openvpn/crl.pem':
         source  => ["puppet:///modules/site_openvpn/${::fqdn}/crl.pem",
+                    "puppet:///modules/site_openvpn/${openvpn::group_name}/crl.pem",
                     "puppet:///modules/site_openvpn/crl.pem"],
         owner   => 'root',
         group   => 0,
@@ -59,13 +60,15 @@ class openvpn::base {
   file{
     # create those ahead of time with: "openssl dhparam -out dh.pem $key_size"
     '/etc/openvpn/dh.pem':
-      source  => ["puppet:///modules/site_openvpn/${::fqdn}/dh.pem"],
+      source  => ["puppet:///modules/site_openvpn/${::fqdn}/dh.pem",
+                  "puppet:///modules/site_openvpn/${openvpn::group_name}/dh.pem"],
       owner   => root,
       group   => 0,
       mode    => 0600,
       require => File['/etc/openvpn'];
     '/etc/openvpn/ca.crt':
       source  => ["puppet:///modules/site_openvpn/${::fqdn}/ca.crt",
+                  "puppet:///modules/site_openvpn/${openvpn::group_name}/ca.crt",
                   "puppet:///modules/site_openvpn/ca.crt"],
       owner   => root,
       group   => 0,
