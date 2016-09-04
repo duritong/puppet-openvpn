@@ -113,7 +113,9 @@ verb 1
 
 client-config-dir clients
 
-#hardening
+# hardening
 reneg-bytes 64000000
+tls-cipher <%= @tls_cipher %>
+cipher <%= @cipher %>
 
 <%= @additional_config %>
