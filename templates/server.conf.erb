@@ -28,10 +28,6 @@ crl-verify crl.pem
 <% end %>
 
 # Diffie hellman parameters.
-# Generate your own with:
-#   openssl dhparam -out dh1024.pem 1024
-# Substitute 2048 for 1024 if you are using
-# 2048 bit keys.
 dh dh.pem
 
 # Configure server mode and supply a VPN subnet
@@ -116,5 +112,8 @@ status openvpn-status.log
 verb 1
 
 client-config-dir clients
+
+#hardening
+reneg-bytes 64000000
 
 <%= @additional_config %>
