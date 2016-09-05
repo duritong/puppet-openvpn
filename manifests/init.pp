@@ -28,8 +28,8 @@ class openvpn (
   $zones = {},
   $crl = false,
   $group_name = "",
-  # The name format of the ciphers is not stable across versions, you probably have to adjust them. See openvpn --show-tls.
-  $tls_cipher = "DHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-SHA256:DHE-RSA-AES256-SHA",
+  # This is tls1.2. See --show-tls for more options.
+  $tls_cipher = "TLS-DHE-RSA-WITH-AES-256-GCM-SHA384",
   $cipher = "AES-128-CBC",
 ) {
   $local_netmask = cidr2netmask($local_net[1])
