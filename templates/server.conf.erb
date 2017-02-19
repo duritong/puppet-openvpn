@@ -3,19 +3,19 @@
 #################################################
 
 # Which local IP address should OpenVPN
-<% unless @bind_address.nil? %>
-local <%= @bind_address %>
+<% unless scope['openvpn::bind_address'].nil? %>
+local <%= scope['openvpn::bind_address'] %>
 <% end %>
 
 # Which TCP/UDP port should OpenVPN listen on?
-port <%= @bind_port %>
+port <%= scope['openvpn::bind_port'] %>
 
 # TCP or UDP server?
-proto <%= @protocol %>
+proto <%= scope['openvpn::protocol'] %>
 
 # "dev tun" will create a routed IP tunnel,
 # "dev tap" will create an ethernet tunnel.
-dev <%= @device_type %>
+dev <%= scope['openvpn::device_type'] %>
 
 # SSL/TLS root certificate (ca), certificate
 # (cert), and private key (key).
@@ -23,7 +23,7 @@ ca ca.crt
 cert server.crt
 key server.key  # This file should be kept secret
 
-<% if @crl %>
+<% if scope['openvpn::crl'] %>
 crl-verify crl.pem
 <% end %>
 
@@ -32,14 +32,14 @@ dh dh.pem
 
 # Configure server mode and supply a VPN subnet
 # for OpenVPN to draw client addresses from.
-server <%= @local_net[0] %> <%= @local_netmask %>
+server <%= scope['openvpn::local_net'][0] %> <%= scope['openvpn::local_netmask'] %>
 
 # Maintain a record of client <-> virtual IP address
 # associations in this file.
 ifconfig-pool-persist ipp.txt
 
-<% unless @zones.empty? %>
-<% @zones.each do |name,zone| %>
+<% unless scope['openvpn::zones'].empty? %>
+<% scope['openvpn::zones'].each do |name,zone| %>
 <% unless zone['route'].nil? %>
 route <%= zone['route'] %>
 <% end %>
@@ -47,30 +47,30 @@ route <%= zone['route'] %>
 <% end %>
 
 
-<% unless @push_route.empty? %>
+<% unless scope['openvpn::push_route'].empty? %>
 # Push routes to the client to allow it
 # to reach other private subnets behind
 # the server.
-<% @push_route.each do |route| %>
+<% scope['openvpn::push_route'].each do |route| %>
 push "route <%= route %>"
 <% end %>
 <% end %>
 
-<% if @push_default_gw %>
+<% if scope['openvpn::push_default_gw'] %>
 # If enabled, this directive will configure
 # all clients to redirect their default
 # network gateway through the VPN.
 push "redirect-gateway def1 bypass-dhcp"
 <% end %>
 
-<% unless @dns_server.empty? && @dns_domain.empty? %>
+<% unless scope['openvpn::dns_server'].empty? && scope['openvpn::dns_domain'].empty? %>
 # Certain Windows-specific network settings
 # can be pushed to clients, such as DNS
 # or WINS server addresses.
-<% @dns_server.each do |dns| %>
+<% scope['openvpn::dns_server'].each do |dns| %>
 push "dhcp-option DNS <%= dns %>"
 <% end %>
-<% @dns_domain.each do |domain| %>
+<% scope['openvpn::dns_domain'].each do |domain| %>
 push "dhcp-option DOMAIN <%= domain %>"
 <% end %>
 <% end %>
@@ -81,19 +81,19 @@ push "dhcp-option DOMAIN <%= domain %>"
 # the other side has gone down.
 keepalive 10 120
 
-<% if @comp_lzo %>
+<% if scope['openvpn::comp_lzo'] %>
 # Enable compression on the VPN link.
 comp-lzo
 <% end %>
 
 # The maximum number of concurrently connected
 # clients we want to allow.
-max-clients <%= @max_clients %>
+max-clients <%= scope['openvpn::max_clients'] %>
 
 # It's a good idea to reduce the OpenVPN
 # daemon's privileges after initialization.
 user nobody
-group nogroup
+group <%= (scope['osfamily'] == 'Debian') ? 'nogroup' : 'nobody' %>
 
 # The persist options will try to avoid
 # accessing certain resources on restart
@@ -116,7 +116,7 @@ client-config-dir clients
 
 # hardening
 reneg-bytes 64000000
-tls-cipher <%= @tls_cipher %>
-cipher <%= @cipher %>
+tls-cipher <%= scope['openvpn::tls_cipher'] %>
+cipher <%= scope['openvpn::cipher'] %>
 
-<%= @additional_config %>
+<%= scope['openvpn::additional_config'] %>

@@ -1,90 +1,99 @@
+# setup openvpn
 class openvpn::base {
   package{'openvpn':
     ensure => installed,
+  } -> service{'openvpn':
+    ensure  => running,
+    enable  => true,
+    require => Package['openvpn'],
   }
 
-  service{'openvpn':
-    ensure     => running,
-    enable     => true,
-    require    => Package[openvpn],
-    hasstatus  => true,
-    hasrestart => true,
+  if $osfamily == 'RedHat' {
+    Service['openvpn']{
+      name => 'openvpn@server'
+    }
   }
 
   file{
     '/etc/openvpn':
-      ensure  => directory;
+      ensure  => directory,
+      owner   => 'root',
+      group   => 0,
+      mode    => '0600',
+      require => Package['openvpn'];
     '/etc/openvpn/server.conf':
       content => template("openvpn/server.conf.erb"),
-      owner   => root,
+      owner   => 'root',
       group   => 0,
-      mode    => 0600,
-      notify  => Service[openvpn],
-      require => File['/etc/openvpn'];
+      mode    => '0600',
+      notify  => Service['openvpn'];
     '/etc/openvpn/clients':
       ensure  => directory,
       owner   => 'root',
       group   => 0,
       mode    => '0755',
-      notify  => Service[openvpn],
-      require => File['/etc/openvpn'];
+      notify  => Service['openvpn'];
     '/etc/openvpn/req-config':
       content => template('openvpn/req-config.erb'),
-      require => File['/etc/openvpn'];
+      owner   => 'root',
+      group   => 0,
+      mode    => '0600';
   }
 
+  exec{
+    'openvpn-generate-csr':
+      command => "openssl req -batch -days ${openvpn::key_expire} -nodes -new -config /etc/openvpn/req-config -newkey rsa:${openvpn::key_size} -keyout /etc/openvpn/server.key -out /etc/openvpn/server.csr",
+      creates => '/etc/openvpn/server.csr',
+      require => File['/etc/openvpn/req-config'];
+    'openvpn-generate-self-signed-cert':
+      command => "openssl req -x509 -sha256 -days ${openvpn::key_expire} -key /etc/openvpn/server.key -in /etc/openvpn/server.csr -out /etc/openvpn/server.crt",
+      creates => '/etc/openvpn/server.crt',
+      require => Exec['openvpn-generate-csr']
+  }
+
+  file{
+    '/etc/openvpn/server.key':
+      owner   => 'root',
+      group   => 0,
+      mode    => '0600',
+      require => Exec['openvpn-generate-csr'];
+  }
+  # create those ahead of time with: "openssl dhparam -out dh.pem $key_size"
+  certs::dhparams{'/etc/openvpn/dh.pem':
+    require => File['/etc/openvpn'],
+    notify  => Service['openvpn'],
+  }
   if $openvpn::crl {
     file {
       '/etc/openvpn/crl.pem':
-        source  => ["puppet:///modules/site_openvpn/${::fqdn}/crl.pem",
-                    "puppet:///modules/site_openvpn/${openvpn::group_name}/crl.pem",
-                    "puppet:///modules/site_openvpn/crl.pem"],
+        source  => $openvpn::crl,
         owner   => 'root',
         group   => 0,
         mode    => '0755',
-        notify  => Service[openvpn],
+        notify  => Service['openvpn'],
         require => File['/etc/openvpn'];
     }
   }
 
-  exec{
-    'generate-csr':
-      command => "openssl req -batch -days $openvpn::key_expire -nodes -new \
--config /etc/openvpn/req-config -newkey rsa:$openvpn::key_size \
--keyout '/etc/openvpn/server.key' -out '/etc/openvpn/server.csr'",
-      creates => "/etc/openvpn/server.csr",
-      require => File['/etc/openvpn/req-config'];
-  }
 
-  file{
-    # create those ahead of time with: "openssl dhparam -out dh.pem $key_size"
-    '/etc/openvpn/dh.pem':
-      source  => ["puppet:///modules/site_openvpn/${::fqdn}/dh.pem",
-                  "puppet:///modules/site_openvpn/${openvpn::group_name}/dh.pem"],
-      owner   => root,
+  if $openvpn::ca_cert {
+    file{'/etc/openvpn/ca.crt':
+      source => $openvpn::ca_cert,
+      owner  => 'root',
+      group  => 0,
+      mode   => '0600',
+      notify => Service['openvpn'],
+    }
+  }
+  # provide this file by signing '/etc/openvpn/server.csr' with your ca.
+  if $openvpn::server_cert {
+    file{'/etc/openvpn/server.crt':
+      source  => $openvpn::server_cert,
+      owner   => 'root',
       group   => 0,
-      mode    => 0600,
-      require => File['/etc/openvpn'];
-    '/etc/openvpn/ca.crt':
-      source  => ["puppet:///modules/site_openvpn/${::fqdn}/ca.crt",
-                  "puppet:///modules/site_openvpn/${openvpn::group_name}/ca.crt",
-                  "puppet:///modules/site_openvpn/ca.crt"],
-      owner   => root,
-      group   => 0,
-      mode    => 0600,
-      require => File['/etc/openvpn'];
-    # provide this file by signing '/etc/openvpn/server.csr' with your ca.
-    '/etc/openvpn/server.crt':
-      source  => ["puppet:///modules/site_openvpn/${::fqdn}/server.crt"],
-      owner   => root,
-      group   => 0,
-      mode    => 0600,
-      notify  => Service[openvpn],
-      require => Exec['generate-csr'];
-    '/etc/openvpn/server.key':
-      owner   => root,
-      group   => 0,
-      mode    => 0600,
-      require => Exec['generate-csr'];
+      mode    => '0600',
+      notify  => Service['openvpn'],
+      require => Exec['openvpn-generate-self-signed-cert'];
+    }
   }
 }

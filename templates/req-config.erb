@@ -9,13 +9,13 @@ distinguished_name   = req_distinguished_name # DN template
 req_extensions       = server_reqext          # Desired extensions
 
 [ req_distinguished_name ]
-C            = <%= @key_country %>
-ST           = <%= @key_state %>
-L            = <%= @key_locality %>
-O            = <%= @key_organization %>
-OU           = <%= @key_organization_unit %>
-CN           = <%= @key_common_name %>
-emailAddress = <%= @key_email %>
+C            = <%= scope['openvpn::key_country'] %>
+ST           = <%= scope['openvpn::key_state'] %>
+L            = <%= scope['openvpn::key_locality'] %>
+O            = <%= scope['openvpn::key_organization'] %>
+OU           = <%= scope['openvpn::key_organization_unit'] %>
+CN           = <%= scope['openvpn::key_common_name'] %>
+emailAddress = <%= scope['openvpn::key_email'] %>
 
 [ server_reqext ]
 nsCertType           = server
