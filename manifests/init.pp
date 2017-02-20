@@ -14,7 +14,7 @@ class openvpn (
   $manage_shorewall       = false,
   $key_size               = 4096,
   $key_expire             = 365,
-  $bind_address           = undef,
+  $bind_address           = false,
   $bind_port              = 1194,
   $protocol               = 'udp',
   $device_type            = 'tun',
