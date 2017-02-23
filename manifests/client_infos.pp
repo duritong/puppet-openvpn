@@ -24,15 +24,14 @@ define openvpn::client_infos(
 
   file {
     "${client_dir}/${name}":
-      notify  => Service[openvpn],
-      require => File['/etc/openvpn'];
+      notify  => Service['openvpn'],
   }
   if $ensure == 'present' {
     File["${client_dir}/${name}"]{
       content => template('openvpn/custom-client.conf.erb'),
       owner   => root,
-      group   => 0,
-      mode    => '0644',
+      group   => $openvpn::group,
+      mode    => '0640',
     }
   } else {
     File["${client_dir}/${name}"]{

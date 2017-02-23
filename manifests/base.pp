@@ -8,6 +8,11 @@ class openvpn::base {
     require => Package['openvpn'],
   }
 
+  $group = $osfamily ? {
+    'Debian' => 'nogroup',
+    default  => 'nobody',
+  }
+
   if $osfamily == 'RedHat' {
     Service['openvpn']{
       name => 'openvpn@server'
@@ -18,8 +23,8 @@ class openvpn::base {
     '/etc/openvpn':
       ensure  => directory,
       owner   => 'root',
-      group   => 0,
-      mode    => '0600',
+      group   => $group,
+      mode    => '0650',
       require => Package['openvpn'];
     '/etc/openvpn/server.conf':
       content => template("openvpn/server.conf.erb"),
@@ -30,8 +35,8 @@ class openvpn::base {
     '/etc/openvpn/clients':
       ensure  => directory,
       owner   => 'root',
-      group   => 0,
-      mode    => '0755',
+      group   => $group,
+      mode    => '0750',
       notify  => Service['openvpn'];
     '/etc/openvpn/req-config':
       content => template('openvpn/req-config.erb'),

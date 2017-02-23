@@ -93,7 +93,7 @@ max-clients <%= scope['openvpn::max_clients'] %>
 # It's a good idea to reduce the OpenVPN
 # daemon's privileges after initialization.
 user nobody
-group <%= (scope['osfamily'] == 'Debian') ? 'nogroup' : 'nobody' %>
+group <%= @group %>
 
 # The persist options will try to avoid
 # accessing certain resources on restart
