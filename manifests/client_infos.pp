@@ -22,6 +22,11 @@ define openvpn::client_infos(
     $dns_domain = []
   }
 
+  $group = $osfamily ? {
+    'Debian' => 'nogroup',
+    default  => 'nobody',
+  }
+
   file {
     "${client_dir}/${name}":
       notify  => Service['openvpn'],
@@ -30,7 +35,7 @@ define openvpn::client_infos(
     File["${client_dir}/${name}"]{
       content => template('openvpn/custom-client.conf.erb'),
       owner   => root,
-      group   => $openvpn::group,
+      group   => $group,
       mode    => '0640',
     }
   } else {
