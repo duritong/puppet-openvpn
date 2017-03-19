@@ -45,6 +45,14 @@ class openvpn::base {
       mode    => '0600';
   }
 
+  if $openvpn::purge_clients {
+    File['/etc/openvpn/clients']{
+      purge   => true,
+      force   => true,
+      recurse => true,
+    }
+  }
+
   exec{
     'openvpn-generate-csr':
       command => "openssl req -batch -days ${openvpn::key_expire} -nodes -new -config /etc/openvpn/req-config -newkey rsa:${openvpn::key_size} -keyout /etc/openvpn/server.key -out /etc/openvpn/server.csr",

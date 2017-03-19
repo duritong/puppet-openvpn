@@ -36,6 +36,7 @@ class openvpn (
   $cipher                 = 'AES-128-CBC',
   $masq_interface         = undef,
   $clients                = {},
+  $purge_clients          = true,
 ) {
   $local_netmask = cidr2netmask($local_net[1])
 
