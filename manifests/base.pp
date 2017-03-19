@@ -27,7 +27,7 @@ class openvpn::base {
       mode    => '0650',
       require => Package['openvpn'];
     '/etc/openvpn/server.conf':
-      content => template("openvpn/server.conf.erb"),
+      content => template('openvpn/server.conf.erb'),
       owner   => 'root',
       group   => 0,
       mode    => '0600',
@@ -61,7 +61,7 @@ class openvpn::base {
     'openvpn-generate-self-signed-cert':
       command => "openssl req -x509 -sha256 -days ${openvpn::key_expire} -key /etc/openvpn/server.key -in /etc/openvpn/server.csr -out /etc/openvpn/server.crt",
       creates => '/etc/openvpn/server.crt',
-      require => Exec['openvpn-generate-csr']
+      require => Exec['openvpn-generate-csr'];
   }
 
   file{
