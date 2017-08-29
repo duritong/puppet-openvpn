@@ -39,7 +39,7 @@ server <%= scope['openvpn::local_net'][0] %> <%= scope['openvpn::local_netmask']
 ifconfig-pool-persist ipp.txt
 
 <% unless scope['openvpn::zones'].empty? %>
-<% scope['openvpn::zones'].each do |name,zone| %>
+<% Array(scope['openvpn::zones']).each do |name,zone| %>
 <% unless zone['route'].nil? %>
 route <%= zone['route'] %>
 <% end %>
@@ -51,7 +51,7 @@ route <%= zone['route'] %>
 # Push routes to the client to allow it
 # to reach other private subnets behind
 # the server.
-<% scope['openvpn::push_route'].each do |route| %>
+<% Array(scope['openvpn::push_route']).each do |route| %>
 push "route <%= route %>"
 <% end %>
 <% end %>
@@ -67,10 +67,10 @@ push "redirect-gateway def1 bypass-dhcp"
 # Certain Windows-specific network settings
 # can be pushed to clients, such as DNS
 # or WINS server addresses.
-<% scope['openvpn::dns_server'].each do |dns| %>
+<% Array(scope['openvpn::dns_server']).each do |dns| %>
 push "dhcp-option DNS <%= dns %>"
 <% end %>
-<% scope['openvpn::dns_domain'].each do |domain| %>
+<% Array(scope['openvpn::dns_domain']).each do |domain| %>
 push "dhcp-option DOMAIN <%= domain %>"
 <% end %>
 <% end %>
