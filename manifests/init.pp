@@ -25,26 +25,26 @@ class openvpn (
   $dns_domain             = [],
   $comp_lzo               = false,
   $max_clients            = 100,
-  $additional_config      = '',
+  $additional_config      = undef,
   $zones                  = {},
   $crl                    = false,
   $ca_cert                = '/var/lib/puppet/ssl/certs/ca.pem',
   $server_cert            = false,
-  $group_name             = '',
+  $group_name             = undef,
   # This is tls1.2. See --show-tls for more options.
   $tls_cipher             = 'TLS-DHE-RSA-WITH-AES-256-GCM-SHA384',
   $cipher                 = 'AES-128-CBC',
-  $masq_interface         = undef,
+  $snat_interface         = undef,
   $clients                = {},
   $purge_clients          = true,
 ) {
   $local_netmask = cidr2netmask($local_net[1])
 
-  case $::operatingsystem {
-    default: { include ::openvpn::base }
+  case $facts['os']['name'] {
+    default: { include openvpn::base }
   }
   if $openvpn::manage_munin {
-    include ::openvpn::munin
+    include openvpn::munin
   }
   if $openvpn::manage_shorewall {
     include shorewall::rules::openvpn
@@ -53,10 +53,11 @@ class openvpn (
       rfc1918 => true,
       options => 'routeback,logmartians';
     }
-    if $masq_interface {
-      shorewall::masq{'openvpn':
-        interface => $masq_interface,
-        source    => "${local_net[0]}/${local_net[1]}",
+    if $snat_interface {
+      shorewall::snat4 { 'openvpn':
+        action => "SNAT(${facts['networking']['interfaces'][$snat_interface]['ip']})",
+        dest   => $snat_interface,
+        source => "${local_net[0]}/${local_net[1]}",
       }
     }
   }
